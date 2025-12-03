@@ -1,3 +1,6 @@
+# Legacy Corne Configuration - Renamed to avoid conflicts
+# This file is kept for reference but should not be used by the new dongle setup
+
 # Uncomment the following lines to enable the Corne RGB Underglow
 # CONFIG_ZMK_RGB_UNDERGLOW=y
 # CONFIG_WS2812_STRIP=y
