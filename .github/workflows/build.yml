@@ -20,7 +20,7 @@ jobs:
           submodules: recursive
 
       - name: Setup ZMK (west + toolchain)
-        uses: zmk-firmware/zmk-helpers@v1
+        uses: zmkfirmware/zmk-action-github-runner@v1
 
       # ←←← ADD THIS BLOCK BELOW ←←←
       - name: Build firmware + generate .hex files (for nRF Connect / SWD)
