@@ -13,7 +13,7 @@
 #
 ---
 include:
-  - board: nrf52840dk_nrf52840
+  - board: seeeduino_xiao_ble
     shield: corne_dongle
     # snippet: studio-rpc-usb-uart
   - board: nice_nano_v2

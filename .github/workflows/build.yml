@@ -1,47 +1,47 @@
-# on: [push, pull_request, workflow_dispatch]
-#
-# jobs:
-#   build:
-#     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
-
-name: Build ZMK Firmware
-
-on:
-  workflow_dispatch:
-  push:
-    branches: [ main ]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
 
-      - name: Setup ZMK (west + toolchain)
-        uses: zmkfirmware/zmk-action-github-runner@v1
-
-      # ←←← ADD THIS BLOCK BELOW ←←←
-      - name: Build firmware + generate .hex files (for nRF Connect / SWD)
-        run: |
-          # Build everything normally (this is the line that already existed)
-          west build -d build --board nrf52840_dongle_nrf52840
-
-          # Convert every .bin that was created into a .hex with the correct offset
-          find build -name "*.bin" -type f | while read binfile; do
-            hexfile="${binfile%.bin}.hex"
-            echo "Converting $binfile → $hexfile"
-            arm-none-eabi-objcopy -I binary -O ihex \
-              --change-addresses=0x26000 \
-              "$binfile" "$hexfile"
-          done
-
-      # ←←← AND MAKE SURE THIS ARTIFACT LINE INCLUDES .hex TOO ←←←
-      - name: Upload firmware artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: firmware
-          path: |
-            build/*.uf2
-            build/*.hex   # ← this line makes the .hex appear in the download zip
+# name: Build ZMK Firmware
+#
+# on:
+#   workflow_dispatch:
+#   push:
+#     branches: [ main ]
+#
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#         with:
+#           submodules: recursive
+#
+#       - name: Setup ZMK (west + toolchain)
+#         uses: zmkfirmware/zmk-action-github-runner@v1
+#
+#       # ←←← ADD THIS BLOCK BELOW ←←←
+#       - name: Build firmware + generate .hex files (for nRF Connect / SWD)
+#         run: |
+#           # Build everything normally (this is the line that already existed)
+#           west build -d build --board nrf52840_dongle_nrf52840
+#
+#           # Convert every .bin that was created into a .hex with the correct offset
+#           find build -name "*.bin" -type f | while read binfile; do
+#             hexfile="${binfile%.bin}.hex"
+#             echo "Converting $binfile → $hexfile"
+#             arm-none-eabi-objcopy -I binary -O ihex \
+#               --change-addresses=0x26000 \
+#               "$binfile" "$hexfile"
+#           done
+#
+#       # ←←← AND MAKE SURE THIS ARTIFACT LINE INCLUDES .hex TOO ←←←
+#       - name: Upload firmware artifacts
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: firmware
+#           path: |
+#             build/*.uf2
+#             build/*.hex   # ← this line makes the .hex appear in the download zip
